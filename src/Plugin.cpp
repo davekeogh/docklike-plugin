@@ -28,6 +28,7 @@ namespace Plugin
 		AppInfos::init();
 		Dock::init();
 		Wnck::init();
+		Theme::init();
 		Hotkeys::init();
 
 		//--------------------------------------------------

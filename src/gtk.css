@@ -1,0 +1,84 @@
+/*
+  These get set at runtime based on current theme:
+  
+  @dl_menu_bgcolor  
+  @dl_menu_item_color
+  @dl_menu_item_color_hover
+  dl_menu_item_bgcolor_hover
+*/
+
+.menu_item image {
+  margin-left: 0.4em;
+}
+
+.menu_item label {
+  margin: 0.5em 0.5em 0.4em 0.5em;
+}
+
+.menu_item button {
+  margin: 0;
+  padding: 0;
+  color: @dl_menu_item_color;
+}
+
+.menu_item button label {
+  margin: 0.1em 0.7em 0 0.7em;
+  padding: 0;
+  font-weight: bold;
+}
+
+.menu_item grid button {
+  background-color: transparent;
+}
+
+.menu_item {
+  background-color: transparent;
+  color: @dl_menu_item_color;
+}
+
+.menu_item.hover grid {
+  background-color: alpha(@dl_menu_item_bgcolor_hover, 0.5);
+}
+
+.menu_item.active grid {
+  background-color: @dl_menu_item_bgcolor_hover;
+  color: @dl_menu_item_color_hover;
+}
+
+.menu_item.active button {
+  color: @dl_menu_item_color_hover;
+}
+
+.menu_item.active label {
+  color: @dl_menu_item_color;
+}
+
+.menu_item button:hover {
+  background-color: alpha(#888, 0.5);
+}
+
+.menu {
+  background-color: @dl_menu_bgcolor;
+  box-shadow: inset 0px 1px alpha(black, 0.2);
+}
+
+.stld box {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.stld .drop {
+  border-left: 0.5em solid slateblue;
+}
+
+.stld button {
+  border: none;
+  border-radius: 0;
+  background: none;
+  text-shadow: none;
+  -gtk-icon-shadow: none;
+  box-shadow: none;
+  padding: 0px;
+}

@@ -16,6 +16,7 @@ libdocklike_la_SOURCES =							\
 		Dock.cpp Dock.hpp							\
 		Wnck.cpp Wnck.hpp							\
 		SettingsDialog.cpp SettingsDialog.hpp		\
+		Theme.cpp Theme.hpp							\
 		State.tpp 									\
 		Store.tpp									\
 		register.c									\

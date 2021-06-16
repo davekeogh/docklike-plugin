@@ -1,5 +1,6 @@
 # TODO
 
++ Install gtk.css somewhere
 + Set initial indicator orientation based on panel orientation
 + Improve the Dots indicator style
 + Investigate why the hover state of groups is not cleared
