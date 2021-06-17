@@ -27,17 +27,21 @@ Group::Group(AppInfo* appInfo, bool pinned) : mGroupMenu(this)
 	mWindowsCount.setup(
 		0, [this]() -> uint {
 			uint count = 0;
+			
 			mWindows.findIf([&count](GroupWindow* e) -> bool {
 				if (!e->getState(WnckWindowState::WNCK_WINDOW_STATE_SKIP_TASKLIST))
 				{
 					++count;
-					if (count == 2) return true;
+					if (count == 2)
+						return true;
 				}
 			return false;
 		});
 
 		return count; },
-		[this](uint windowsCount) -> void { updateStyle(); });
+		[this](uint windowsCount) -> void {
+			updateStyle();
+		});
 
 	mLeaveTimeout.setup(40, [this]() {
 		uint distance = mGroupMenu.getPointerDistance();
@@ -789,14 +793,14 @@ bool Group::onDragMotion(GtkWidget* widget, GdkDragContext* context, int x, int 
 		}
 	}
 
-	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "drop");
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "drop_target");
 	gdk_drag_status(context, GDK_ACTION_MOVE, time);
 	return true;
 }
 
 void Group::onDragLeave(const GdkDragContext* context, guint time)
 {
-	Help::Gtk::cssClassRemove(GTK_WIDGET(mButton), "drop");
+	Help::Gtk::cssClassRemove(GTK_WIDGET(mButton), "drop_target");
 }
 
 void Group::onDragDataGet(const GdkDragContext* context, GtkSelectionData* selectionData, guint info, guint time)

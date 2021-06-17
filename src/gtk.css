@@ -1,41 +1,44 @@
-/*
+/* 
   These variables are set at runtime based on the current GTK theme:
-
   @dl_menu_bgcolor  
   @dl_menu_item_color
   @dl_menu_item_color_hover
-  dl_menu_item_bgcolor_hover
+  @dl_menu_item_bgcolor_hover
 
-
-  Selectors defined by the plugin:
-
+  CSS selectors used by the plugin:
   #docklike-plugin
   .group
+  .group:active
+  .group:hover
   .menu
   .menu_item
-
+  .menu_item:active
+  .menu_item:hover
 
   See for more details:
-
   https://developer.gnome.org/gtk3/stable/chap-css-overview.html
   https://developer.gnome.org/gtk3/stable/chap-css-properties.html
 */
 
+/* This defines how the drop target is highlighted */
+.drop_target {
+  box-shadow: inset 4px 0px 0px 0px darkviolet;
+}
+
+/* These define how the individual dock items are styled */
+.group {  }
+.group:hover {  }
+.group:active {  }
+
+/* These define how the individual menu items are styled */
+.menu_item {  }
+.menu_item:hover {  }
+.menu_item:hover {  }
+
+/* An undecorated window with the current GTK theme's menu background color set */
 .menu {
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 0;
-  background-color: @dl_menu_bgcolor;
-  box-shadow: inset 0px 1px alpha(black, 0.2);
-}
-
-.drop {
-  border-left: 0.5em solid slateblue;
-}
-
-/* This will get overridden unless you select the CSS indicator style
-.group {
   background-color: @dl_menu_bgcolor;
 }
-*/
