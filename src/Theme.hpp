@@ -17,9 +17,7 @@
 namespace Theme
 {
 	void init();
-	void load();
-
-	void applyDefault(GtkWidget* widget);
+	void load_css();
 } // namespace Theme
 
 #endif

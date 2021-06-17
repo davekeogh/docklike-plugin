@@ -12,7 +12,7 @@ namespace Theme
 	GtkCssProvider* mCssProvider;
 	GtkStyleContext* mStyleContext;
 
-	std::string setupColors();
+	std::string get_initial_colors();
 
 	void init()
 	{
@@ -20,68 +20,59 @@ namespace Theme
 		mCssProvider = gtk_css_provider_new();
 		mStyleContext = gtk_widget_get_style_context(Dock::mBox);
 
-        load();
+		load_css();
 
 		g_signal_connect(G_OBJECT(mStyleContext), "changed",
-			G_CALLBACK(+[](GtkStyleContext* stylecontext) { load(); }), NULL);
+			G_CALLBACK(+[](GtkStyleContext* stylecontext) { load_css(); }), NULL);
 	}
 
-	void load()
+	void load_css()
 	{
-		std::string cssStyle = setupColors();
+		std::string css = get_initial_colors();
 		const gchar* filename;
-		FILE* file_handle;
-		int c;
+		FILE* f;
 
-        if (g_environ_getenv(g_get_environ(), "XDG_CONFIG_HOME") != NULL)
-            filename = g_build_filename(g_environ_getenv(g_get_environ(), "XDG_CONFIG_HOME"), "xfce4-docklike-plugin/gtk.css", NULL);
-        else
-            filename = g_build_filename(g_environ_getenv(g_get_environ(), "HOME"), "xfce4-docklike-plugin/gtk.css", NULL);
+		if (g_environ_getenv(g_get_environ(), "XDG_CONFIG_HOME") != NULL)
+			filename = g_build_filename(g_environ_getenv(g_get_environ(), "XDG_CONFIG_HOME"),
+				"xfce4-docklike-plugin/gtk.css", NULL);
+		else
+			filename = g_build_filename(g_environ_getenv(g_get_environ(), "HOME"),
+				".config/xfce4-docklike-plugin/gtk.css", NULL);
 
 		if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
-			file_handle = fopen(filename, "r");
-        else
-        {
-            // TODO: Update Makefile to install gtk.css and point this to it:
-            filename = "/home/david/Projects/xfce4-docklike-plugin/src/gtk.css"; 
-            if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
-			    file_handle = fopen(filename, "r");
-        }
-
-		if (file_handle != NULL)
+			f = fopen(filename, "r");
+		else
 		{
-			while ((c = getc(file_handle)) != EOF)
-				cssStyle += c;
-			fclose(file_handle);
+			// TODO: Update Makefile to install gtk.css and point this to it:
+			filename = "/home/david/Projects/xfce4-docklike-plugin/src/gtk.css";
+			if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+				f = fopen(filename, "r");
 		}
 
-		if (gtk_css_provider_load_from_data(mCssProvider, cssStyle.c_str(), -1, NULL))
+		if (f != NULL)
+		{
+			int read_char;
+			while ((read_char = getc(f)) != EOF)
+				css += read_char;
+			fclose(f);
+		}
+
+		if (gtk_css_provider_load_from_data(mCssProvider, css.c_str(), -1, NULL))
 			gtk_style_context_add_provider_for_screen(mScreen, GTK_STYLE_PROVIDER(mCssProvider),
 				GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-            
-        printf(cssStyle.c_str(), NULL);
 	}
 
-	void applyDefault(GtkWidget* widget)
-	{
-		gtk_style_context_remove_provider(gtk_widget_get_style_context(widget),
-            GTK_STYLE_PROVIDER(mCssProvider));
-	}
-
-	std::string setupColors()
+	std::string get_initial_colors()
 	{
 		GtkWidget* menu = gtk_menu_new();
+		GtkWidget* item = gtk_menu_item_new();
 		GtkStyleContext* sc = gtk_widget_get_style_context(menu);
 
 		GValue gv = G_VALUE_INIT;
 		gtk_style_context_get_property(sc, "background-color", GTK_STATE_FLAG_NORMAL, &gv);
 		GdkRGBA* rgba = (GdkRGBA*)g_value_get_boxed(&gv);
 		std::string menuBg = gdk_rgba_to_string(rgba);
-
-		GtkWidget* item = gtk_menu_item_new();
 		gtk_menu_attach(GTK_MENU(menu), item, 0, 1, 0, 1);
-
-		sc = gtk_widget_get_style_context(item);
 
 		gv = G_VALUE_INIT;
 		gtk_style_context_get_property(sc, "color", GTK_STATE_FLAG_NORMAL, &gv);

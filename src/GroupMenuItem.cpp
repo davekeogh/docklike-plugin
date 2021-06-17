@@ -13,11 +13,12 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 	mGroupWindow = groupWindow;
 	mHover = false;
 
-	mItem = (GtkEventBox*)gtk_event_box_new();
+	mItem = GTK_EVENT_BOX(gtk_event_box_new());
+	gtk_drag_dest_set(GTK_WIDGET(mItem), GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
 	gtk_widget_show(GTK_WIDGET(mItem));
 	g_object_ref(mItem);
 
-	mGrid = (GtkGrid*)gtk_grid_new();
+	mGrid = GTK_GRID(gtk_grid_new());
 	gtk_grid_set_column_spacing(mGrid, 6);
 	gtk_widget_set_margin_start(GTK_WIDGET(mGrid), 6);
 	gtk_widget_set_margin_end(GTK_WIDGET(mGrid), 6);
@@ -26,29 +27,28 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 	gtk_widget_show(GTK_WIDGET(mGrid));
 	gtk_container_add(GTK_CONTAINER(mItem), GTK_WIDGET(mGrid));
 
-	mIcon = (GtkImage*)gtk_image_new();
+	mIcon = GTK_IMAGE(gtk_image_new());
 	gtk_widget_show(GTK_WIDGET(mIcon));
 	gtk_grid_attach(mGrid, GTK_WIDGET(mIcon), 0, 0, 1, 1);
 
-	mLabel = (GtkLabel*)gtk_label_new("");
+	mLabel = GTK_LABEL(gtk_label_new(""));
 	gtk_label_set_xalign(mLabel, 0);
 	gtk_label_set_ellipsize(mLabel, PANGO_ELLIPSIZE_END);
 	gtk_label_set_width_chars(mLabel, 26);
 	gtk_widget_show(GTK_WIDGET(mLabel));
 	gtk_grid_attach(mGrid, GTK_WIDGET(mLabel), 1, 0, 1, 1);
 
-	mCloseButton = (GtkButton*)gtk_button_new_from_icon_name("gtk-close", GTK_ICON_SIZE_MENU);
+	mCloseButton = GTK_BUTTON(gtk_button_new_from_icon_name("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_button_set_relief(mCloseButton, GTK_RELIEF_NONE);
 	gtk_widget_show(GTK_WIDGET(mCloseButton));
 	gtk_grid_attach(mGrid, GTK_WIDGET(mCloseButton), 2, 0, 1, 1);
 
-	mPreview = (GtkImage*)gtk_image_new();
+	mPreview = GTK_IMAGE(gtk_image_new());
 	gtk_widget_set_margin_top(GTK_WIDGET(mPreview), 6);
 	gtk_widget_set_margin_bottom(GTK_WIDGET(mPreview), 6);
 	gtk_grid_attach(mGrid, GTK_WIDGET(mPreview), 0, 1, 3, 1);
 	gtk_widget_set_visible(GTK_WIDGET(mPreview), Settings::showPreviews);
 
-	// Update the previews while the group or menu is hovered
 	mPreviewTimeout.setup(500, [this]() {
 		updatePreview();
 		return true;
@@ -88,19 +88,19 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 		this);
 
 	g_signal_connect(G_OBJECT(mItem), "drag-leave",
-		G_CALLBACK(+[](GtkWidget* widget, GdkDragContext* context, guint time, GroupMenuItem* me) {
+		G_CALLBACK(+[](GtkWidget* widget, GdkDragContext* c, guint time, GroupMenuItem* me) {
 			me->mGroupWindow->mGroup->setMouseLeaveTimeout();
 			me->mDragSwitchTimeout.stop();
 		}),
 		this);
 
 	g_signal_connect(G_OBJECT(mItem), "drag-motion",
-		G_CALLBACK(+[](GtkWidget* w, GdkDragContext* context, gint x, gint y, guint time, GroupMenuItem* me) {
+		G_CALLBACK(+[](GtkWidget* w, GdkDragContext* c, gint x, gint y, guint time, GroupMenuItem* me) {
 			if (!me->mDragSwitchTimeout.mTimeoutId)
 				me->mDragSwitchTimeout.start();
 
 			me->mGroupWindow->mGroup->mLeaveTimeout.stop();
-			gdk_drag_status(context, GDK_ACTION_DEFAULT, time);
+			gdk_drag_status(c, GDK_ACTION_DEFAULT, time);
 			return true;
 		}),
 		this);
@@ -117,8 +117,6 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 			return false;
 		}),
 		this);
-
-	gtk_drag_dest_set(GTK_WIDGET(mItem), GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
 }
 
 GroupMenuItem::~GroupMenuItem()
@@ -159,7 +157,7 @@ void GroupMenuItem::updatePreview()
 	if ((mGroupWindow->mState & WNCK_WINDOW_STATE_MINIMIZED) == WNCK_WINDOW_STATE_MINIMIZED)
 		return; // minimized windows never need a new thumbnail
 
-	// TODO: This needs work to survive porting to GTK4 and/or Wayland.
+	// This needs work to survive porting to GTK4 and/or Wayland.
 	// use gdk_pixbuf_get_from_surface in GTK4
 	// use gdk_device_get_window_at_position in Wayland
 
@@ -169,15 +167,19 @@ void GroupMenuItem::updatePreview()
 		GdkPixbuf* pixbuf;
 		GdkPixbuf* thumbnail;
 
-		window = gdk_x11_window_foreign_new_for_display(Plugin::display, wnck_window_get_xid(mGroupWindow->mWnckWindow));
+		window = gdk_x11_window_foreign_new_for_display(Plugin::display,
+			wnck_window_get_xid(mGroupWindow->mWnckWindow));
 
 		if (window != NULL)
 		{
-			pixbuf = gdk_pixbuf_get_from_window(window, 0, 0, gdk_window_get_width(window), gdk_window_get_height(window));
+			pixbuf = gdk_pixbuf_get_from_window(window, 0, 0, gdk_window_get_width(window),
+				gdk_window_get_height(window));
 
 			if (pixbuf != NULL)
 			{
-				thumbnail = gdk_pixbuf_scale_simple(pixbuf, gdk_pixbuf_get_width(pixbuf) / 8, gdk_pixbuf_get_height(pixbuf) / 8, GDK_INTERP_BILINEAR);
+				thumbnail = gdk_pixbuf_scale_simple(pixbuf,
+					gdk_pixbuf_get_width(pixbuf) / 8, gdk_pixbuf_get_height(pixbuf) / 8, GDK_INTERP_BILINEAR);
+
 				gtk_image_set_from_pixbuf(mPreview, thumbnail);
 
 				g_object_unref(thumbnail);

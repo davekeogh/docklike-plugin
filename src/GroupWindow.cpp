@@ -137,6 +137,8 @@ void GroupWindow::showMenu() {}
 
 void GroupWindow::updateState()
 {
+	bool onScreen = true;
+	bool monitorChanged = false;
 	mState = Wnck::getState(this);
 
 	bool onWorkspace = true;
@@ -152,9 +154,6 @@ void GroupWindow::updateState()
 		}
 	}
 
-	bool onScreen = true;
-
-	bool monitorChanged = false;
 	if (Settings::onlyDisplayScreen)
 	{
 		// Adapted from Xfce panel's tasklist-widget.c
