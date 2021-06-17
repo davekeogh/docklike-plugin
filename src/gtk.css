@@ -1,10 +1,16 @@
 /*
-  These get set at runtime based on current theme:
-  
+  These variables get set at runtime based on the current GTK theme:
+
   @dl_menu_bgcolor  
   @dl_menu_item_color
   @dl_menu_item_color_hover
   dl_menu_item_bgcolor_hover
+
+
+  See for more details:
+
+  https://developer.gnome.org/gtk3/stable/chap-css-overview.html
+  https://developer.gnome.org/gtk3/stable/chap-css-properties.html
 */
 
 .menu_item image {
