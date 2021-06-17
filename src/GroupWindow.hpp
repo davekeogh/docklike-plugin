@@ -29,28 +29,23 @@ class GroupWindow
 	GroupWindow(WnckWindow* wnckWindow);
 	~GroupWindow();
 
+	void updateState();
 	void getInGroup();
 	void leaveGroup();
-
 	void onActivate();
 	void onUnactivate();
-
+	void minimize();
+	void activate(guint32 timestamp);
 	bool getState(WnckWindowState flagMask);
 
-	void activate(guint32 timestamp);
-	void minimize();
-	void showMenu();
-
 	Group* mGroup;
-	bool mGroupAssociated;
-
-	WnckWindow* mWnckWindow;
 	GroupMenuItem* mGroupMenuItem;
 
+	WnckWindow* mWnckWindow;
 	GdkMonitor* mMonitor = NULL;
 
-	void updateState();
 	unsigned short mState;
+	bool mGroupAssociated;
 };
 
 #endif

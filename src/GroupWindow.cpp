@@ -12,14 +12,14 @@ GroupWindow::GroupWindow(WnckWindow* wnckWindow)
 	mGroupMenuItem = new GroupMenuItem(this);
 	mGroupAssociated = false;
 
-	std::string groupName = Wnck::getGroupName(this); // check here for exotic group association (like libreoffice)
+	// TODO: check here for exotic group association (like libreoffice)
+	std::string groupName = Wnck::getGroupName(this);
 	AppInfo* appInfo = AppInfos::search(groupName);
 
 	mGroup = Dock::prepareGroup(appInfo);
 
 	//--------------------------------------------------
 
-	// signal connection
 	g_signal_connect(G_OBJECT(mWnckWindow), "name-changed",
 		G_CALLBACK(+[](WnckWindow* window, GroupWindow* me) {
 			me->mGroupMenuItem->updateLabel();
@@ -65,13 +65,15 @@ GroupWindow::GroupWindow(WnckWindow* wnckWindow)
 		}),
 		this);
 
-	// initial state
 	updateState();
-
 	mGroupMenuItem->updateIcon();
 	mGroupMenuItem->updateLabel();
 	mGroupMenuItem->updatePreview();
 }
+
+bool GroupWindow::getState(WnckWindowState flagMask) { return (mState & flagMask) != 0; }
+void GroupWindow::activate(guint32 timestamp) { Wnck::activate(this, timestamp); }
+void GroupWindow::minimize() { Wnck::minimize(this); }
 
 GroupWindow::~GroupWindow()
 {
@@ -83,7 +85,6 @@ void GroupWindow::getInGroup()
 {
 	if (mGroupAssociated)
 		return;
-
 	mGroup->add(this);
 	mGroupAssociated = true;
 }
@@ -92,7 +93,6 @@ void GroupWindow::leaveGroup()
 {
 	if (!mGroupAssociated)
 		return;
-
 	mGroup->remove(this);
 	mGroup->onWindowUnactivate();
 	mGroupAssociated = false;
@@ -118,33 +118,18 @@ void GroupWindow::onUnactivate()
 		mGroup->onWindowUnactivate();
 }
 
-bool GroupWindow::getState(WnckWindowState flagMask)
-{
-	return (mState & flagMask) != 0;
-}
-
-void GroupWindow::activate(guint32 timestamp)
-{
-	Wnck::activate(this, timestamp);
-}
-
-void GroupWindow::minimize()
-{
-	Wnck::minimize(this);
-}
-
-void GroupWindow::showMenu() {}
-
 void GroupWindow::updateState()
 {
 	bool onScreen = true;
 	bool monitorChanged = false;
+	bool onWorkspace = true;
+	bool onTasklist = !(mState & WnckWindowState::WNCK_WINDOW_STATE_SKIP_TASKLIST);
 	mState = Wnck::getState(this);
 
-	bool onWorkspace = true;
 	if (Settings::onlyDisplayVisible)
 	{
 		WnckWorkspace* windowWorkspace = wnck_window_get_workspace(mWnckWindow);
+		
 		if (windowWorkspace != NULL)
 		{
 			WnckWorkspace* activeWorkspace = wnck_screen_get_active_workspace(Wnck::mWnckScreen);
@@ -158,19 +143,13 @@ void GroupWindow::updateState()
 	{
 		// Adapted from Xfce panel's tasklist-widget.c
 		gint x, y, w, h;
-		GdkWindow* window;
-		GdkMonitor* currentMonitor;
 
-		/* The tasklist itself. */
-		window = gtk_widget_get_window(GTK_WIDGET(Plugin::mXfPlugin));
-
-		/* The window we are making a button for. */
 		wnck_window_get_geometry(mWnckWindow, &x, &y, &w, &h);
 
-		currentMonitor = gdk_display_get_monitor_at_point(Plugin::display, x + (w / 2), y + (h / 2));
+		GdkWindow* pluginWindow = gtk_widget_get_window(GTK_WIDGET(Plugin::mXfPlugin));
+		GdkMonitor* currentMonitor = gdk_display_get_monitor_at_point(Plugin::display, x + (w / 2), y + (h / 2));
 
-		/* Ask Gdk if they are on the same monitor. */
-		if (gdk_display_get_monitor_at_window(Plugin::display, window) != currentMonitor)
+		if (gdk_display_get_monitor_at_window(Plugin::display, pluginWindow) != currentMonitor)
 			onScreen = false;
 
 		if (mMonitor != currentMonitor)
@@ -182,11 +161,9 @@ void GroupWindow::updateState()
 		else
 			monitorChanged = false;
 
-		g_free(window);
+		g_free(pluginWindow);
 		g_free(currentMonitor);
 	}
-
-	bool onTasklist = !(mState & WnckWindowState::WNCK_WINDOW_STATE_SKIP_TASKLIST);
 
 	if (onWorkspace && onTasklist && onScreen)
 	{
