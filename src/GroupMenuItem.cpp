@@ -15,6 +15,7 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 
 	mItem = GTK_EVENT_BOX(gtk_event_box_new());
 	gtk_drag_dest_set(GTK_WIDGET(mItem), GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mItem), "menu_item");
 	gtk_widget_show(GTK_WIDGET(mItem));
 	g_object_ref(mItem);
 
@@ -73,7 +74,7 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 		G_CALLBACK(+[](GtkWidget* widget, GdkEventCrossing* event, GroupMenuItem* me) {
 			if (event->state & GDK_BUTTON1_MASK)
 				me->mGroupWindow->activate(event->time);
-			// set hover style class
+			Help::Gtk::cssClassAdd(GTK_WIDGET(me->mItem), "hover");
 			gtk_widget_queue_draw(widget);
 			return true;
 		}),
@@ -81,7 +82,7 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 
 	g_signal_connect(G_OBJECT(mItem), "leave-notify-event",
 		G_CALLBACK(+[](GtkWidget* widget, GdkEvent* event, GroupMenuItem* me) {
-			// clear hover style class
+			Help::Gtk::cssClassRemove(GTK_WIDGET(me->mItem), "hover");
 			gtk_widget_queue_draw(widget);
 			return true;
 		}),

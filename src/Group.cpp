@@ -12,8 +12,9 @@ static GtkTargetList* targetList = gtk_target_list_new(entries, 1);
 Group::Group(AppInfo* appInfo, bool pinned) : mGroupMenu(this)
 {
 	mButton = gtk_button_new();
-	gtk_style_context_add_class(gtk_widget_get_style_context(mButton), "group");
-	gtk_style_context_add_class(gtk_widget_get_style_context(mButton), "flat");
+
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "group");
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "flat");
 
 	mIconPixbuf = NULL;
 	mAppInfo = appInfo;
@@ -788,14 +789,14 @@ bool Group::onDragMotion(GtkWidget* widget, GdkDragContext* context, int x, int 
 		}
 	}
 
-	gtk_style_context_add_class(gtk_widget_get_style_context(mButton), "drop");
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "drop");
 	gdk_drag_status(context, GDK_ACTION_MOVE, time);
 	return true;
 }
 
 void Group::onDragLeave(const GdkDragContext* context, guint time)
 {
-	gtk_style_context_remove_class(gtk_widget_get_style_context(mButton), "drop");
+	Help::Gtk::cssClassRemove(GTK_WIDGET(mButton), "drop");
 }
 
 void Group::onDragDataGet(const GdkDragContext* context, GtkSelectionData* selectionData, guint info, guint time)

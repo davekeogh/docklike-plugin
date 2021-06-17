@@ -22,7 +22,7 @@ namespace Dock
 		gtk_widget_show(mBox);
 
 		// Redraw the panel items when the AppInfos have changed
-		mDrawTimeout.setup(250, []() {
+		mDrawTimeout.setup(500, []() {
 			if (AppInfos::modified)
 			{
 				drawGroups();
