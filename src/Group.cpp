@@ -12,10 +12,6 @@ static GtkTargetList* targetList = gtk_target_list_new(entries, 1);
 Group::Group(AppInfo* appInfo, bool pinned) : mGroupMenu(this)
 {
 	mButton = gtk_button_new();
-
-	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "group");
-	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "flat");
-
 	mIconPixbuf = NULL;
 	mAppInfo = appInfo;
 	mPinned = pinned;
@@ -135,11 +131,9 @@ Group::Group(AppInfo* appInfo, bool pinned) : mGroupMenu(this)
 			me->mMenuShowTimeout.start();
 
 			if (Settings::showPreviews)
-			{
 				me->mWindows.forEach([](GroupWindow* w) -> void {
 					w->mGroupMenuItem->mPreviewTimeout.start();
 				});
-			}
 
 			return false;
 		}),
@@ -150,17 +144,16 @@ Group::Group(AppInfo* appInfo, bool pinned) : mGroupMenu(this)
 		G_CALLBACK(+[](GtkWidget* widget, GdkEventCrossing* event, Group* me) {
 			me->setStyle(Style::Hover, false);
 			me->mMenuShowTimeout.stop();
+
 			if (me->mPinned && me->mWindowsCount == 0)
 				me->onMouseLeave();
 			else
 				me->setMouseLeaveTimeout();
 
 			if (Settings::showPreviews)
-			{
 				me->mWindows.forEach([](GroupWindow* w) -> void {
 					w->mGroupMenuItem->mPreviewTimeout.stop();
 				});
-			}
 
 			return true;
 		}),
@@ -180,6 +173,7 @@ Group::Group(AppInfo* appInfo, bool pinned) : mGroupMenu(this)
 	gtk_button_set_relief(GTK_BUTTON(mButton), GTK_RELIEF_NONE);
 	gtk_widget_add_events(mButton, GDK_SCROLL_MASK);
 	gtk_button_set_always_show_image(GTK_BUTTON(mButton), true);
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "group");
 
 	if (mPinned)
 		gtk_widget_show(mButton);
@@ -338,17 +332,6 @@ void Group::setStyle(Style style, bool val)
 		break;
 	}
 	}
-}
-
-void Group::onDrawNew(cairo_t* cr)
-{
-	int width = gtk_widget_get_allocated_width(GTK_WIDGET(mButton));
-	int height = gtk_widget_get_allocated_height(GTK_WIDGET(mButton));
-
-	double red = (*Settings::indicatorColor).red;
-	double green = (*Settings::indicatorColor).green;
-	double blue = (*Settings::indicatorColor).blue;
-	double alpha = 1;
 }
 
 void Group::onDraw(cairo_t* cr)
@@ -694,13 +677,11 @@ void Group::electNewTopWindow()
 		if (mWindows.size() == 1)
 			newTopWindow = mWindows.get(0);
 		else
-		{
 			newTopWindow = Wnck::mGroupWindows.findIf([this](std::pair<gulong, GroupWindow*> e) -> bool {
 				if (e.second->mGroup == this)
 					return true;
 				return false;
 			});
-		}
 
 		setTopWindow(newTopWindow);
 	}
@@ -806,8 +787,6 @@ void Group::onDragLeave(const GdkDragContext* context, guint time)
 void Group::onDragDataGet(const GdkDragContext* context, GtkSelectionData* selectionData, guint info, guint time)
 {
 	Group* me = this;
-
-	// TODO is the source object copied or passed by a pointer ?
 	gtk_selection_data_set(selectionData, gdk_atom_intern("button", false), 32, (const guchar*)me, sizeof(gpointer) * 32);
 }
 
