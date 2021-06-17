@@ -33,7 +33,7 @@
 /* These define how the individual menu items are styled */
 .menu_item {  }
 .menu_item:hover {  }
-.menu_item:hover {  }
+.menu_item:active {  }
 
 /* An undecorated window with the current GTK theme's menu background color set */
 .menu {
