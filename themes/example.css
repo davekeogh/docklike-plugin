@@ -34,7 +34,7 @@
 .active_menu_item label { color: white; }
 
 /* An undecorated window with the current GTK theme's menu background color set */
- .menu {
+.menu {
   margin: 0;
   padding: 0;
   border: 0;
