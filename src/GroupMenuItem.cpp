@@ -50,7 +50,7 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 	gtk_grid_attach(mGrid, GTK_WIDGET(mPreview), 0, 1, 3, 1);
 	gtk_widget_set_visible(GTK_WIDGET(mPreview), Settings::showPreviews);
 
-	mPreviewTimeout.setup(500, [this]() {
+	mPreviewTimeout.setup(250, [this]() {
 		updatePreview();
 		return true;
 	});
