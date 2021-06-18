@@ -75,6 +75,23 @@ namespace Wnck
 
 		g_signal_connect(G_OBJECT(mWnckScreen), "active-window-changed",
 			G_CALLBACK(+[](WnckScreen* screen, WnckWindow* previousActiveWindow) {
+				gulong activeXID = getActiveWindowXID();
+				if (activeXID)
+				{
+					GroupWindow* activeWindow = mGroupWindows.get(activeXID);
+					Help::Gtk::cssClassAdd(GTK_WIDGET(activeWindow->mGroupMenuItem->mItem), "active_menu_item");
+					
+				}
+				if (previousActiveWindow != NULL)
+				{
+					gulong prevXID = wnck_window_get_xid(previousActiveWindow);
+					if (prevXID)
+					{
+						GroupWindow* prevWindow = mGroupWindows.get(prevXID);
+						if (prevWindow != NULL)
+							Help::Gtk::cssClassRemove(GTK_WIDGET(prevWindow->mGroupMenuItem->mItem), "active_menu_item");
+					}
+				}
 				setActiveWindow();
 			}),
 			NULL);

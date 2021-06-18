@@ -1,6 +1,5 @@
 # TODO
 
-+ Install gtk.css somewhere
 + Move aliases to a text file so users can add stuff
 + Set initial indicator orientation based on panel orientation
 + Improve the Dots indicator style

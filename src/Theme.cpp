@@ -42,12 +42,7 @@ namespace Theme
 		if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
 			f = fopen(filename, "r");
 		else
-		{
-			// TODO: Update Makefile to install gtk.css and point this to it:
-			filename = "/home/david/Projects/xfce4-docklike-plugin/src/gtk.css";
-			if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
-				f = fopen(filename, "r");
-		}
+			return;
 
 		if (f != NULL)
 		{
@@ -92,6 +87,6 @@ namespace Theme
 		gtk_widget_destroy(item);
 		gtk_widget_destroy(menu);
 
-		return "@define-color dl_menu_bgcolor " + menuBg + ";\n@define-color dl_menu_item_color " + itemLabel + ";\n@define-color dl_menu_item_color_hover " + itemLabelHover + ";\n@define-color dl_menu_item_bgcolor_hover " + itemBgHover + ";\n";
+		return "@define-color menu_bgcolor " + menuBg + ";\n@define-color menu_item_color " + itemLabel + ";\n@define-color menu_item_color_hover " + itemLabelHover + ";\n@define-color menu_item_bgcolor_hover " + itemBgHover + ";\n";
 	}
 } // namespace Theme

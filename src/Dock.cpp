@@ -117,6 +117,9 @@ namespace Dock
 			WnckWindow* wnckWindow = WNCK_WINDOW(window_l->data);
 			GroupWindow* groupWindow = new GroupWindow(wnckWindow);
 
+			if (Wnck::getActiveWindowXID() == wnck_window_get_xid(wnckWindow))
+				Help::Gtk::cssClassAdd(GTK_WIDGET(groupWindow->mGroupMenuItem->mItem), "active_menu_item");
+
 			Wnck::mGroupWindows.push(wnck_window_get_xid(wnckWindow), groupWindow);
 
 			groupWindow->leaveGroup();

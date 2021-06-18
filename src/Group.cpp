@@ -694,6 +694,9 @@ void Group::onWindowActivate(GroupWindow* groupWindow)
 		mActive = true;
 		setStyle(Style::Focus, true);
 		setTopWindow(groupWindow);
+
+		Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "active_group");
+		Help::Gtk::cssClassRemove(GTK_WIDGET(mButton), "group");
 	}
 }
 
@@ -701,6 +704,9 @@ void Group::onWindowUnactivate()
 {
 	mActive = false;
 	setStyle(Style::Focus, false);
+
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "group");
+	Help::Gtk::cssClassRemove(GTK_WIDGET(mButton), "active_group");
 }
 
 void Group::setTopWindow(GroupWindow* groupWindow)
