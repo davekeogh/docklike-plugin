@@ -1,16 +1,16 @@
 # TODO
 
 + Install gtk.css somewhere
++ Move aliases to a text file so users can add stuff
 + Set initial indicator orientation based on panel orientation
 + Improve the Dots indicator style
 + Investigate why the hover state of groups is not cleared
 + New CSS indicator style, No indicator style
-+ Configurable thumbnail size
++ Redesign the settings dialog to accomidate more options
++ Configurable thumbnail size, update sleep
 + Rebindable keyboard shortcuts
 + Option to launch another rather than close all with middle click
-+ Make sure we are finding all the .desktop files
-+ Associate new .desktop file in ~/.local/share/applications etc.
-+ Editing launchers with exo-desktop-item-edit
++ Option to set minimum width/height
 + Docs: write the help page and update screenshots
 + Memory: something is not getting freed/unrefd when a group is closed
 + Test how well the updating thumbnails perform on a really slow system
@@ -19,6 +19,9 @@
 
 ## DONE
 
+> + Make sure we are finding all the .desktop files
+> + Associate new .desktop file in ~/.local/share/applications etc.
+> + Editing launchers with exo-desktop-item-edit
 > + Simplify Theme.cpp
 > + Fix all build warnings
 > + Indicator orientation
