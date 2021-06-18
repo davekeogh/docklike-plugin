@@ -1,19 +1,21 @@
 /* 
+  THIS IS ALL SUBJECT TO CHANGE
+
+  Any of these can be used in ~/.config/gtk.css
+
   These variables are set at runtime based on the current GTK theme:
   @menu_bgcolor  
   @menu_item_color
   @menu_item_color_hover
   @menu_item_bgcolor_hover
 
-  CSS selectors used by the plugin:
+  CSS selectors created by the plugin:
   #docklike-plugin
   .group
-  .group:active
-  .group:hover
+  .active_group
   .menu
   .menu_item
-  .menu_item:active
-  .menu_item:hover
+  .active_menu_item
 
   See for more details:
   https://developer.gnome.org/gtk3/stable/chap-css-overview.html
@@ -38,5 +40,5 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background-color: @dl_menu_bgcolor;
+  background-color: @menu_bgcolor;
 }
