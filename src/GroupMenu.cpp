@@ -100,6 +100,12 @@ void GroupMenu::popup()
 		gint wx, wy;
 		mVisible = true;
 
+		// Update the previews before showing
+		if (Settings::showPreviews)
+			mGroup->mWindows.forEach([](GroupWindow* w) -> void {
+				w->mGroupMenuItem->updatePreview();
+			});
+
 		//xfce_panel_plugin_block_autohide(Plugin::mXfPlugin, true);
 		xfce_panel_plugin_position_widget(Plugin::mXfPlugin, mWindow, mGroup->mButton, &wx, &wy);
 		gtk_window_move(GTK_WINDOW(mWindow), wx, wy);
