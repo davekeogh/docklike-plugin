@@ -3,8 +3,6 @@
 + Move aliases to a text file so users can add stuff
 + Set initial indicator orientation based on panel orientation
 + Improve the Dots indicator style
-+ Investigate why the hover state of groups is not cleared
-+ New CSS indicator style, No indicator style
 + Redesign the settings dialog to accomidate more options
 + Configurable thumbnail size, update sleep
 + Rebindable keyboard shortcuts
@@ -18,6 +16,7 @@
 
 ## DONE
 
+> + New CSS indicator style, No indicator style
 > + Make sure we are finding all the .desktop files
 > + Associate new .desktop file in ~/.local/share/applications etc.
 > + Editing launchers with exo-desktop-item-edit
