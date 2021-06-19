@@ -1,7 +1,8 @@
 /* 
   THIS IS ALL SUBJECT TO CHANGE
 
-  Any of these can be used in ~/.config/gtk-3.0/gtk.css
+  Save this as: 
+  ~/.config/xfce4-docklike-plugin/gtk.css (restart xfce4-panel)
 
   These variables are set at runtime based on the current GTK theme:
   @menu_bgcolor  
@@ -23,17 +24,25 @@
 */
 
 /* These define how the individual dock items are styled */
-#docklike-plugin .group { background-color: black; }
-#docklike-plugin .active_group { border-left: 4px solid salmon; }
-
-/* How the drop target is highlighted */
-#docklike-plugin .drop_target { box-shadow: inset 4px 0px 0px 0px darkviolet; }
+.group {
+  border-left: 1px solid grey;
+}
+.active_group {
+  border-left: 4px solid salmon;
+}
 
 /* These define how the individual menu items are styled */
-.menu_item {  }
-.menu_item label {  }
-.active_menu_item { background-color: darkmagenta; }
-.active_menu_item label { color: white; }
+.active_menu_item {
+  background-color: darkmagenta;
+}
+.active_menu_item label {
+  color: white;
+}
+
+/* How the drop target is highlighted */
+.drop_target {
+  box-shadow: inset 4px 0px 0px 0px darkviolet;
+}
 
 /* An undecorated window with the current GTK theme's menu background color set */
 .menu {

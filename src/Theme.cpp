@@ -8,6 +8,9 @@
 
 namespace Theme
 {
+	// This needs work to survive porting to GTK4.
+	// GdkScreen is removed, use GdkDisplay instead.
+
 	GdkScreen* mScreen;
 	GtkCssProvider* mCssProvider;
 	GtkStyleContext* mStyleContext;

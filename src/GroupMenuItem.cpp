@@ -13,6 +13,9 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 	mGroupWindow = groupWindow;
 	mHover = false;
 
+	// This needs work to survive porting to GTK4.
+	// GtkEventBox is removed, all events are supported by all widgets.
+
 	mItem = GTK_EVENT_BOX(gtk_event_box_new());
 	gtk_drag_dest_set(GTK_WIDGET(mItem), GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
 	Help::Gtk::cssClassAdd(GTK_WIDGET(mItem), "menu_item");
@@ -74,7 +77,6 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 		G_CALLBACK(+[](GtkWidget* widget, GdkEventCrossing* event, GroupMenuItem* me) {
 			if (event->state & GDK_BUTTON1_MASK)
 				me->mGroupWindow->activate(event->time);
-			Help::Gtk::cssClassAdd(GTK_WIDGET(me->mItem), "hover");
 			gtk_widget_queue_draw(widget);
 			return true;
 		}),
@@ -82,7 +84,6 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 
 	g_signal_connect(G_OBJECT(mItem), "leave-notify-event",
 		G_CALLBACK(+[](GtkWidget* widget, GdkEvent* event, GroupMenuItem* me) {
-			Help::Gtk::cssClassRemove(GTK_WIDGET(me->mItem), "hover");
 			gtk_widget_queue_draw(widget);
 			return true;
 		}),

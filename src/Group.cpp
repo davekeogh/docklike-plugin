@@ -606,6 +606,10 @@ void Group::onDraw(cairo_t* cr)
 
 		break;
 	}
+	case 3: // None
+	{
+		return;
+	}
 	}
 }
 

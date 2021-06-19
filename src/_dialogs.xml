@@ -29,7 +29,6 @@
           <object class="GtkButtonBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">edge</property>
             <child>
               <object class="GtkButton" id="b_help">
                 <property name="label" translatable="yes">_Help</property>
@@ -207,6 +206,7 @@
                           <item translatable="yes">Bars</item>
                           <item translatable="yes">Dots</item>
                           <item translatable="yes">Rectangles</item>
+                          <item translatable="yes">None</item>
                         </items>
                       </object>
                       <packing>
@@ -389,7 +389,7 @@
 It requires X11 XInput2.0 extension which is is not provided by your system.</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="stock">gtk-dialog-error</property>
+                        <property name="stock">gtk-dialog-warning</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
