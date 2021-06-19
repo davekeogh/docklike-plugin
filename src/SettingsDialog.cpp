@@ -137,6 +137,17 @@ namespace SettingsDialog
 			}),
 			dialog);
 
+		GObject* inactiveColor = gtk_builder_get_object(builder, "cp_inactiveColor");
+		gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(inactiveColor), Settings::inactiveColor);
+		g_signal_connect(inactiveColor, "color-set",
+			G_CALLBACK(+[](GtkColorButton* inactiveColor, GtkWidget* g) {
+				gdk_rgba_free(Settings::inactiveColor);
+				GdkRGBA* color = (GdkRGBA*)malloc(sizeof(GdkRGBA));
+				gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(inactiveColor), color);
+				Settings::inactiveColor.set(gdk_rgba_copy(color));
+			}),
+			dialog);
+
 		// =====================================================================
 
 		GObject* iconSize = gtk_builder_get_object(builder, "e_iconSize");

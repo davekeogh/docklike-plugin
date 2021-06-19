@@ -363,19 +363,21 @@ void Group::onDraw(cairo_t* cr)
 
 	// indicators ==============================================================
 
-	double rgb[3];
+	double rgba[4];
 
 	if (mSFocus)
 	{
-		rgb[0] = (*Settings::indicatorColor).red;
-		rgb[1] = (*Settings::indicatorColor).green;
-		rgb[2] = (*Settings::indicatorColor).blue;
+		rgba[0] = (*Settings::indicatorColor).red;
+		rgba[1] = (*Settings::indicatorColor).green;
+		rgba[2] = (*Settings::indicatorColor).blue;
+		rgba[3] = (*Settings::indicatorColor).alpha;
 	}
 	else
 	{
-		rgb[0] = 0.7;
-		rgb[1] = 0.7;
-		rgb[2] = 0.7;
+		rgba[0] = (*Settings::inactiveColor).red;
+		rgba[1] = (*Settings::inactiveColor).green;
+		rgba[2] = (*Settings::inactiveColor).blue;
+		rgba[3] = (*Settings::inactiveColor).alpha;
 	}
 
 	switch (Settings::indicatorStyle)
@@ -386,7 +388,7 @@ void Group::onDraw(cairo_t* cr)
 
 		if (mSOpened)
 		{
-			cairo_set_source_rgba(cr, rgb[0], rgb[1], rgb[2], 1);
+			cairo_set_source_rgba(cr, rgba[0], rgba[1], rgba[2], rgba[3]);
 
 			if (Settings::indicatorOrientation == 0) // Bottom
 				cairo_rectangle(cr, 0, round(h * BAR_WEIGHT), w, h - round(h * BAR_WEIGHT));
@@ -482,8 +484,8 @@ void Group::onDraw(cairo_t* cr)
 				}
 
 				cairo_pattern_t* pat = cairo_pattern_create_radial(x0, y0, 0, x0, y0, dotRadius);
-				cairo_pattern_add_color_stop_rgba(pat, 0.4, rgb[0], rgb[1], rgb[2], 1);
-				cairo_pattern_add_color_stop_rgba(pat, 1, rgb[0], rgb[1], rgb[2], 0.10);
+				cairo_pattern_add_color_stop_rgba(pat, 0.4, rgba[0], rgba[1], rgba[2], rgba[3]);
+				cairo_pattern_add_color_stop_rgba(pat, 1, rgba[0], rgba[1], rgba[2], 0.10);
 				cairo_set_source(cr, pat);
 
 				cairo_arc(cr, x0, y0, dotRadius, 0.0, 2.0 * M_PI);
@@ -492,8 +494,8 @@ void Group::onDraw(cairo_t* cr)
 				cairo_pattern_destroy(pat);
 
 				pat = cairo_pattern_create_radial(x1, y1, 0, x1, y1, dotRadius);
-				cairo_pattern_add_color_stop_rgba(pat, 0.4, rgb[0], rgb[1], rgb[2], 1);
-				cairo_pattern_add_color_stop_rgba(pat, 1, rgb[0], rgb[1], rgb[2], 0.10);
+				cairo_pattern_add_color_stop_rgba(pat, 0.4, rgba[0], rgba[1], rgba[2], rgba[3]);
+				cairo_pattern_add_color_stop_rgba(pat, 1, rgba[0], rgba[1], rgba[2], 0.10);
 				cairo_set_source(cr, pat);
 
 				cairo_arc(cr, x1, y1, dotRadius, 0.0, 2.0 * M_PI);
@@ -527,8 +529,8 @@ void Group::onDraw(cairo_t* cr)
 				}
 
 				cairo_pattern_t* pat = cairo_pattern_create_radial(x, y, 0, x, y, dotRadius);
-				cairo_pattern_add_color_stop_rgba(pat, 0.4, rgb[0], rgb[1], rgb[2], 1);
-				cairo_pattern_add_color_stop_rgba(pat, 1, rgb[0], rgb[1], rgb[2], 0.10);
+				cairo_pattern_add_color_stop_rgba(pat, 0.4, rgba[0], rgba[1], rgba[2], rgba[3]);
+				cairo_pattern_add_color_stop_rgba(pat, 1, rgba[0], rgba[1], rgba[2], 0.10);
 				cairo_set_source(cr, pat);
 
 				cairo_arc(cr, x, y, dotRadius, 0.0, 2.0 * M_PI);
@@ -558,7 +560,7 @@ void Group::onDraw(cairo_t* cr)
 				int sep = vw / 11.;
 				sep = std::max(sep - (sep % 2) + (vw % 2), 2);
 
-				cairo_set_source_rgba(cr, rgb[0], rgb[1], rgb[2], 1);
+				cairo_set_source_rgba(cr, rgba[0], rgba[1], rgba[2], rgba[3]);
 
 				if (Settings::indicatorOrientation == 0) // Bottom
 				{
@@ -589,7 +591,7 @@ void Group::onDraw(cairo_t* cr)
 				space = space + (space % 2) + (vw % 2);
 				int start = (vw - space) / 2;
 
-				cairo_set_source_rgba(cr, rgb[0], rgb[1], rgb[2], 1);
+				cairo_set_source_rgba(cr, rgba[0], rgba[1], rgba[2], rgba[3]);
 
 				if (Settings::indicatorOrientation == 0) // Bottom
 					cairo_rectangle(cr, start, round(h * BAR_WEIGHT), space, round(h * (1 - BAR_WEIGHT)));

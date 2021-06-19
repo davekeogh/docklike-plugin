@@ -22,6 +22,7 @@ namespace Settings
 	State<int> indicatorOrientation;
 	State<int> indicatorStyle;
 	State<GdkRGBA*> indicatorColor;
+	State<GdkRGBA*> inactiveColor;
 
 	State<bool> keyComboActive;
 	State<bool> keyAloneActive;
@@ -94,6 +95,20 @@ namespace Settings
 		indicatorColor.setup(color,
 			[](GdkRGBA* indicatorColor) -> void {
 				g_key_file_set_string(mFile, "user", "indicatorColor", gdk_rgba_to_string(indicatorColor));
+				saveFile();
+
+				gtk_widget_queue_draw(Dock::mBox);
+			});
+
+		colorString = g_key_file_get_string(mFile, "user", "inactiveColor", NULL);
+		color = (GdkRGBA*)malloc(sizeof(GdkRGBA));
+
+		if (colorString == NULL || !gdk_rgba_parse(color, colorString))
+			gdk_rgba_parse(color, "rgb(76,166,230)");
+
+		inactiveColor.setup(color,
+			[](GdkRGBA* indicatorColor) -> void {
+				g_key_file_set_string(mFile, "user", "inactiveColor", gdk_rgba_to_string(inactiveColor));
 				saveFile();
 
 				gtk_widget_queue_draw(Dock::mBox);

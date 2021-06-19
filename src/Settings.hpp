@@ -37,6 +37,7 @@ namespace Settings
 	extern State<int> indicatorOrientation;
 	extern State<int> indicatorStyle;
 	extern State<GdkRGBA*> indicatorColor;
+	extern State<GdkRGBA*> inactiveColor;
 
 	extern State<bool> keyComboActive;
 	extern State<bool> keyAloneActive;
