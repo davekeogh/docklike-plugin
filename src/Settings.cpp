@@ -27,6 +27,8 @@ namespace Settings
 	State<bool> keyAloneActive;
 
 	State<std::list<std::string>> pinnedAppList;
+	
+	State<int> dockSize;
 
 	void init()
 	{
