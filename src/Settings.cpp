@@ -134,12 +134,6 @@ namespace Settings
 			});
 
 		gchar** pinnedListBuffer = g_key_file_get_string_list(mFile, "user", "pinned", NULL, NULL);
-		
-		dockSize.setup(g_key_file_get_integer(mFile, "user", "dockSize", NULL),
-			[](int dockSize) -> void {
-				g_key_file_set_integer(mFile, "user", "dockSize", dockSize);
-				saveFile();
-			});
 
 		pinnedAppList.setup(Help::Gtk::bufferToStdStringList(pinnedListBuffer),
 			[](std::list<std::string> list) -> void {
@@ -149,6 +143,12 @@ namespace Settings
 			});
 
 		g_strfreev(pinnedListBuffer);
+
+		dockSize.setup(g_key_file_get_integer(mFile, "user", "dockSize", NULL),
+			[](int dockSize) -> void {
+				g_key_file_set_integer(mFile, "user", "dockSize", dockSize);
+				saveFile();
+			});		
 	}
 
 	void saveFile()
