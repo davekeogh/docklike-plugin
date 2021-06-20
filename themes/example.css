@@ -13,6 +13,7 @@
   CSS selectors created by the plugin:
   #docklike-plugin
   .group
+  .open_group
   .active_group
   .menu
   .menu_item
@@ -26,6 +27,9 @@
 /* These define how the individual dock items are styled */
 .group {
   border-left: 1px solid grey;
+}
+.open_group {
+  border-left: 4px solid teal;
 }
 .active_group {
   border-left: 4px solid salmon;

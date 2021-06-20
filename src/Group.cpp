@@ -205,6 +205,7 @@ void Group::add(GroupWindow* window)
 	mWindows.push(window);
 	mWindowsCount.updateState();
 	mGroupMenu.add(window->mGroupMenuItem);
+	Help::Gtk::cssClassAdd(GTK_WIDGET(mButton), "open_group");
 
 	if (mWindowsCount == 1 && !mPinned)
 		gtk_box_reorder_child(GTK_BOX(Dock::mBox), GTK_WIDGET(mButton), -1);
@@ -216,6 +217,9 @@ void Group::remove(GroupWindow* window)
 	mWindowsCount.updateState();
 	mGroupMenu.remove(window->mGroupMenuItem);
 	setStyle(Style::Focus, false);
+	
+	if (!mWindowsCount)
+		Help::Gtk::cssClassRemove(GTK_WIDGET(mButton), "open_group");
 }
 
 void Group::activate(guint32 timestamp)
