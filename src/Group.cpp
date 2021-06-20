@@ -12,6 +12,7 @@ static GtkTargetList* targetList = gtk_target_list_new(entries, 1);
 Group::Group(AppInfo* appInfo, bool pinned) : mGroupMenu(this)
 {
 	mButton = gtk_button_new();
+	Help::Gtk::cssClassAdd(mButton, "flat");
 	mIconPixbuf = NULL;
 	mAppInfo = appInfo;
 	mPinned = pinned;
