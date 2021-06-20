@@ -107,7 +107,7 @@ namespace Settings
 			gdk_rgba_parse(color, "rgb(76,166,230)");
 
 		inactiveColor.setup(color,
-			[](GdkRGBA* indicatorColor) -> void {
+			[](GdkRGBA* inactiveColor) -> void {
 				g_key_file_set_string(mFile, "user", "inactiveColor", gdk_rgba_to_string(inactiveColor));
 				saveFile();
 
