@@ -38,7 +38,6 @@ namespace Plugin
 	extern GdkDisplay* display;
 	extern GdkSeat* seat;
 
-	void getPointerPosition(gint* x, gint* y);
 	void aboutDialog();
 	void remoteEvent(gchar* name, GValue* value);
 } // namespace Plugin

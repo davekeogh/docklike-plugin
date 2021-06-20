@@ -127,7 +127,7 @@ uint GroupMenu::getPointerDistance()
 
 	gtk_window_get_position(GTK_WINDOW(mWindow), &wx, &wy);
 	gtk_window_get_size(GTK_WINDOW(mWindow), &ww, &wh);
-	Plugin::getPointerPosition(&px, &py);
+	gdk_device_get_position(Plugin::mPointer, NULL, &px, &py);
 
 	if (px < wx)
 		dx = wx - px;

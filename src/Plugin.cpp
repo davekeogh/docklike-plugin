@@ -72,11 +72,6 @@ namespace Plugin
 			NULL);
 	}
 
-	void getPointerPosition(gint* x, gint* y)
-	{
-		gdk_device_get_position(mPointer, NULL, x, y);
-	}
-
 	void aboutDialog()
 	{
 		const gchar* authors[] = {
@@ -122,8 +117,4 @@ namespace Plugin
 
 //----------------------------------------------------------------------------------------------------------------------
 
-extern "C" void construct(XfcePanelPlugin* xfPlugin)
-{
-	// xfce_textdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR, "UTF-8");
-	Plugin::init(xfPlugin);
-}
+extern "C" void construct(XfcePanelPlugin* xfPlugin) { Plugin::init(xfPlugin); }
