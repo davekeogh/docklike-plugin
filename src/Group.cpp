@@ -610,7 +610,7 @@ void Group::onDraw(cairo_t* cr)
 	}
 	case 3: // None
 	{
-		return;
+		cairo_fill(cr);
 	}
 	}
 }
