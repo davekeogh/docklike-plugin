@@ -19,6 +19,9 @@ namespace Dock
 	{
 		mBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_widget_set_name(GTK_WIDGET(mBox), "docklike-plugin");
+		gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(mBox)), "stld");
+		if (Settings::dockSize != 0)
+            		gtk_widget_set_size_request (mBox, Settings::dockSize, -1);
 		gtk_widget_show(mBox);
 
 		// Redraw the panel items when the AppInfos have changed
@@ -30,6 +33,7 @@ namespace Dock
 			}
 			return true;
 		});
+		mDrawTimeout.start();
 	}
 
 	Group* prepareGroup(AppInfo* appInfo)
@@ -83,14 +87,15 @@ namespace Dock
 
 	void drawGroups()
 	{
-		// Remove any existing groups
 		if (mGroups.size())
 		{
-			gtk_container_foreach(
-				GTK_CONTAINER(mBox), +[](GtkWidget* widget, gpointer data) {
-					gtk_widget_destroy(widget);
-				},
-				NULL);
+			// Remove old groups
+			for (GList* child = gtk_container_get_children(GTK_CONTAINER(mBox));
+				 child != NULL;
+				 child = child->next)
+			{
+				gtk_container_remove(GTK_CONTAINER(mBox), GTK_WIDGET(child->data));
+			}
 
 			mGroups.clear();
 		}
@@ -125,6 +130,8 @@ namespace Dock
 			groupWindow->leaveGroup();
 			groupWindow->updateState();
 		}
+
+		gtk_widget_queue_draw(mBox);
 	}
 
 	void hoverSupered(bool on)
@@ -202,5 +209,12 @@ namespace Dock
 	void onPanelOrientationChange(GtkOrientation orientation)
 	{
 		gtk_orientable_set_orientation(GTK_ORIENTABLE(mBox), orientation);
+	        if (Settings::dockSize != 0)
+        	{
+            		if (orientation == GTK_ORIENTATION_HORIZONTAL)
+                		gtk_widget_set_size_request (mBox, Settings::dockSize, -1);
+            		else
+                		gtk_widget_set_size_request (mBox, -1, Settings::dockSize);
+        	}
 	}
 } // namespace Dock

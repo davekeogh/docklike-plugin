@@ -11,7 +11,6 @@ static GtkTargetEntry entries[1] = {{(gchar*)"any", 0, 0}};
 GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 {
 	mGroupWindow = groupWindow;
-	mHover = false;
 
 	// This needs work to survive porting to GTK4.
 	// GtkEventBox is removed, all events are supported by all widgets.
@@ -54,6 +53,7 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 	gtk_widget_set_visible(GTK_WIDGET(mPreview), Settings::showPreviews);
 
 	mPreviewTimeout.setup(250, [this]() {
+		gtk_widget_set_visible(GTK_WIDGET(mPreview), Settings::showPreviews);
 		updatePreview();
 		return true;
 	});
@@ -112,13 +112,6 @@ GroupMenuItem::GroupMenuItem(GroupWindow* groupWindow)
 			Wnck::close(me->mGroupWindow, 0);
 		}),
 		this);
-
-	g_signal_connect(G_OBJECT(mItem), "draw",
-		G_CALLBACK(+[](GtkEventBox* widget, cairo_t* cr, GroupMenuItem* me) {
-			// paint hover style class
-			return false;
-		}),
-		this);
 }
 
 GroupMenuItem::~GroupMenuItem()
@@ -129,16 +122,7 @@ GroupMenuItem::~GroupMenuItem()
 
 void GroupMenuItem::updateLabel()
 {
-	if (Wnck::getActiveWindowXID() == wnck_window_get_xid(mGroupWindow->mWnckWindow))
-	{
-		gchar* markup = g_strdup_printf("<b>%s</b>",
-			g_markup_escape_text(Wnck::getName(mGroupWindow).c_str(),
-				Wnck::getName(mGroupWindow).length()));
-
-		gtk_label_set_markup(mLabel, markup);
-	}
-	else
-		gtk_label_set_text(mLabel, Wnck::getName(mGroupWindow).c_str());
+	gtk_label_set_text(mLabel, Wnck::getName(mGroupWindow).c_str());
 }
 
 void GroupMenuItem::updateIcon()

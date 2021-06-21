@@ -198,10 +198,12 @@ namespace AppInfos
 	}
 
 	// ADDIT GroupName aliases
+	// TODO: Load these from a file so that the user can add their own aliases
 	std::map<std::string, std::string> mGroupNameRename = {
 		{"soffice", "libreoffice-startcenter"},
 		{"libreoffice", "libreoffice-startcenter"},
 		{"radium_linux.bin", "radium"},
+		{"viberpc", "viber"},
 	};
 
 	void groupNameTransform(std::string& groupName)

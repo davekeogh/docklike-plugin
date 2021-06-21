@@ -12,14 +12,16 @@ namespace SettingsDialog
 	void updateKeyComboActiveWarning(GtkWidget* widget)
 	{
 		if (!Settings::keyComboActive || Hotkeys::mGrabbedKeys == Hotkeys::NbHotkeys)
+		{
 			gtk_widget_hide(widget);
-
+		}
 		else
 		{
-			std::string tooltip = "";
-
+			std::string tooltip;
 			if (Hotkeys::mGrabbedKeys > 0)
 				tooltip = g_strdup_printf(_("<b>Only the first %u hotkeys(s) are enabled.</b>\n"), Hotkeys::mGrabbedKeys);
+			else
+				tooltip = "";
 
 			tooltip += g_strdup_printf(_("The &lt;SUPER&gt;+%u combination seems already in use by another process.\nCheck your Xfce settings."), Hotkeys::mGrabbedKeys + 1);
 
@@ -36,7 +38,6 @@ namespace SettingsDialog
 		/* Hook to make sure GtkBuilder knows are the XfceTitledDialog object */
 		if (xfce_titled_dialog_get_type() == 0)
 			return;
-
 		GtkBuilder* builder = gtk_builder_new_from_resource("/_dialogs.xml");
 		GtkWidget* dialog = (GtkWidget*)gtk_builder_get_object(builder, "dialog");
 
@@ -100,13 +101,15 @@ namespace SettingsDialog
 			}),
 			NULL);
 
-		GObject* showPreviews = gtk_builder_get_object(builder, "c_showPreviews");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(showPreviews), Settings::showPreviews);
-		g_signal_connect(showPreviews, "toggled",
-			G_CALLBACK(+[](GtkToggleButton* showPreviews) {
-				Settings::showPreviews.set(gtk_toggle_button_get_active(showPreviews));
+		// =====================================================================
+
+		GObject* indicatorOrientation = gtk_builder_get_object(builder, "co_indicatorOrientation");
+		gtk_combo_box_set_active(GTK_COMBO_BOX(indicatorOrientation), Settings::indicatorOrientation);
+		g_signal_connect(indicatorOrientation, "changed",
+			G_CALLBACK(+[](GtkComboBox* indicatorOrientation, GtkWidget* g) {
+				Settings::indicatorOrientation.set(gtk_combo_box_get_active(GTK_COMBO_BOX(indicatorOrientation)));
 			}),
-			NULL);
+			dialog);
 
 		// =====================================================================
 
@@ -118,13 +121,7 @@ namespace SettingsDialog
 			}),
 			dialog);
 
-		GObject* indicatorOrientation = gtk_builder_get_object(builder, "co_indicatorOrientation");
-		gtk_combo_box_set_active(GTK_COMBO_BOX(indicatorOrientation), Settings::indicatorOrientation);
-		g_signal_connect(indicatorOrientation, "changed",
-			G_CALLBACK(+[](GtkComboBox* indicatorOrientation, GtkWidget* g) {
-				Settings::indicatorOrientation.set(gtk_combo_box_get_active(GTK_COMBO_BOX(indicatorOrientation)));
-			}),
-			dialog);
+		// =====================================================================
 
 		GObject* indicatorColor = gtk_builder_get_object(builder, "cp_indicatorColor");
 		gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(indicatorColor), Settings::indicatorColor);
@@ -173,6 +170,16 @@ namespace SettingsDialog
 
 		// =====================================================================
 
+		GObject* showPreviews = gtk_builder_get_object(builder, "c_showPreviews");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(showPreviews), Settings::showPreviews);
+		g_signal_connect(showPreviews, "toggled",
+			G_CALLBACK(+[](GtkToggleButton* showPreviews) {
+				Settings::showPreviews.set(gtk_toggle_button_get_active(showPreviews));
+			}),
+			NULL);
+
+		// =====================================================================
+
 		GObject* keyComboActiveWarning = gtk_builder_get_object(builder, "c_keyComboActiveWarning");
 		GObject* keyComboActive = gtk_builder_get_object(builder, "c_keyComboActive");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(keyComboActive), Settings::keyComboActive);
@@ -183,6 +190,8 @@ namespace SettingsDialog
 			}),
 			keyComboActiveWarning);
 		updateKeyComboActiveWarning(GTK_WIDGET(keyComboActiveWarning));
+
+		// =====================================================================
 
 		GObject* keyAloneActive = gtk_builder_get_object(builder, "c_keyAloneActive");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(keyAloneActive), Settings::keyAloneActive);
