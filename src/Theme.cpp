@@ -15,7 +15,7 @@ namespace Theme
 	GtkCssProvider* mCssProvider;
 	GtkStyleContext* mStyleContext;
 
-	std::string get_initial_colors();
+	std::string setupColors();
 
 	void init()
 	{
@@ -23,15 +23,15 @@ namespace Theme
 		mCssProvider = gtk_css_provider_new();
 		mStyleContext = gtk_widget_get_style_context(Dock::mBox);
 
-		load_css();
+		load();
 
 		g_signal_connect(G_OBJECT(mStyleContext), "changed",
-			G_CALLBACK(+[](GtkStyleContext* stylecontext) { load_css(); }), NULL);
+			G_CALLBACK(+[](GtkStyleContext* stylecontext) { load(); }), NULL);
 	}
 
-	void load_css()
+	void load()
 	{
-		std::string css = get_initial_colors();
+		std::string css = setupColors();
 		const gchar* filename;
 		FILE* f;
 
@@ -60,7 +60,7 @@ namespace Theme
 				GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	}
 
-	std::string get_initial_colors()
+	std::string setupColors()
 	{
 		GtkWidget* menu = gtk_menu_new();
 		GtkWidget* item = gtk_menu_item_new();

@@ -17,7 +17,7 @@
 namespace Theme
 {
 	void init();
-	void load_css();
+	void load();
 } // namespace Theme
 
 #endif
