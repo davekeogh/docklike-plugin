@@ -80,7 +80,6 @@ namespace Wnck
 				{
 					GroupWindow* activeWindow = mGroupWindows.get(activeXID);
 					Help::Gtk::cssClassAdd(GTK_WIDGET(activeWindow->mGroupMenuItem->mItem), "active_menu_item");
-					
 				}
 				if (previousActiveWindow != NULL)
 				{

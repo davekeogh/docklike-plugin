@@ -218,7 +218,7 @@ void Group::remove(GroupWindow* window)
 	mWindowsCount.updateState();
 	mGroupMenu.remove(window->mGroupMenuItem);
 	setStyle(Style::Focus, false);
-	
+
 	if (!mWindowsCount)
 		Help::Gtk::cssClassRemove(GTK_WIDGET(mButton), "open_group");
 }

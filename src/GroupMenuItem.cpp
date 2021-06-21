@@ -122,7 +122,16 @@ GroupMenuItem::~GroupMenuItem()
 
 void GroupMenuItem::updateLabel()
 {
-	gtk_label_set_text(mLabel, Wnck::getName(mGroupWindow).c_str());
+	if (Wnck::getActiveWindowXID() == wnck_window_get_xid(mGroupWindow->mWnckWindow))
+	{
+		gchar* markup = g_strdup_printf("<b>%s</b>",
+			g_markup_escape_text(Wnck::getName(mGroupWindow).c_str(),
+				Wnck::getName(mGroupWindow).length()));
+
+		gtk_label_set_markup(mLabel, markup);
+	}
+	else
+		gtk_label_set_text(mLabel, Wnck::getName(mGroupWindow).c_str());
 }
 
 void GroupMenuItem::updateIcon()

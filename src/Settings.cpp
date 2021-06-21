@@ -28,7 +28,7 @@ namespace Settings
 	State<bool> keyAloneActive;
 
 	State<std::list<std::string>> pinnedAppList;
-	
+
 	State<int> dockSize;
 
 	void init()
@@ -161,11 +161,12 @@ namespace Settings
 
 		g_strfreev(pinnedListBuffer);
 
+		// HIDDEN SETTINGS:
 		dockSize.setup(g_key_file_get_integer(mFile, "user", "dockSize", NULL),
 			[](int dockSize) -> void {
 				g_key_file_set_integer(mFile, "user", "dockSize", dockSize);
 				saveFile();
-			});		
+			});
 	}
 
 	void saveFile()

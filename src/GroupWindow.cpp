@@ -101,6 +101,7 @@ void GroupWindow::onActivate()
 {
 	Help::Gtk::cssClassAdd(GTK_WIDGET(mGroupMenuItem->mItem), "active");
 	gtk_widget_queue_draw(GTK_WIDGET(mGroupMenuItem->mItem));
+	mGroupMenuItem->updateLabel();
 
 	if (mGroupAssociated)
 		mGroup->onWindowActivate(this);
@@ -110,6 +111,7 @@ void GroupWindow::onUnactivate()
 {
 	Help::Gtk::cssClassRemove(GTK_WIDGET(mGroupMenuItem->mItem), "active");
 	gtk_widget_queue_draw(GTK_WIDGET(mGroupMenuItem->mItem));
+	mGroupMenuItem->updateLabel();
 
 	if (mGroupAssociated)
 		mGroup->onWindowUnactivate();
@@ -126,7 +128,7 @@ void GroupWindow::updateState()
 	if (Settings::onlyDisplayVisible)
 	{
 		WnckWorkspace* windowWorkspace = wnck_window_get_workspace(mWnckWindow);
-		
+
 		if (windowWorkspace != NULL)
 		{
 			WnckWorkspace* activeWorkspace = wnck_screen_get_active_workspace(Wnck::mWnckScreen);
